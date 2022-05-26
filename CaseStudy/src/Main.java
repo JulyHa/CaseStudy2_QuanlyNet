@@ -21,12 +21,12 @@ public class Main {
         User user = new User();
         while (true){
             boolean check = false;
-            System.out.print("Nhập tên tài khoản: ");
+            System.out.print("Account: ");
             user.setUsername(scanner.nextLine() );
-            System.out.print("Nhập mật khẩu: ");
+            System.out.print("Password: ");
             user.setPassword(scanner.nextLine() );
             if (Login(user)) break;
-            else System.out.println("Tài khoản hoặc mật khẩu không khớp!");
+            else System.out.println("Incorrect account or password ");
         }
 
         Menu menu = new Menu();

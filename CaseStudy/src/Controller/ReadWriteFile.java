@@ -37,7 +37,7 @@ public class ReadWriteFile {
             fw.close();
             return true;
         } catch (IOException ex) {
-            System.out.println("Lỗi ghi file: " + ex);
+            System.out.println("Error: " + ex);
             return false;
         }
     }

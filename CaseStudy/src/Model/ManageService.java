@@ -79,7 +79,7 @@ public class ManageService {
 
     public void printItemListService(int i){
         i--;
-        System.out.println("Tên dịch vụ: " + listService.get(i).getNameService() + " - " +listService.get(i).getPrice() +"VND");
+        System.out.println("Service name: " + listService.get(i).getNameService() + " - " +listService.get(i).getPrice() +"VND");
     }
 
     public int findItemListService(String fullname) {

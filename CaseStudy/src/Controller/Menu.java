@@ -2,6 +2,7 @@ package Controller;
 
 import Model.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Menu {
@@ -11,29 +12,29 @@ public class Menu {
     static ManageUser userList =  new ManageUser() ;
     static ManageComputer computerList = new ManageComputer();
     static ManageService serviceList = new ManageService();
-    static String menu = """
-            -------------------------------PHẦN MỀM TÍNH TIỀN--------------------
-            |           1. Hiển thị danh sách máy có trong quán                 |
-            |           2.      Thêm 1 máy mới vào danh sách                    |
-            |           3.      Sửa đổi thông tin của máy                       |
-            |           4.      Xóa 1 máy khỏi danh sách                        |
-            |           5.           Thêm dịch vụ                               |
-            |           6.   Chỉnh sửa tính tiền theo giờ                       |
-            |           7.          Tính tiền                                   |
-            |           8.      Quản lý tài khoản đăng nhập                     |
-            |           9.          Doanh thu                                   |
-            |           10.  >>>>>>>>>>>> Thoát <<<<<<<<<<<<<                   |
-            -------------------------------Chọn chức năng------------------------
-            Chọn chức năng:  """;
-    static String menuAccount = """
-            ---------------------------Quản lý tài khoản------------------------
-            |                       1. Thêm mới                                 |
-            |                       2. Sửa                                      |
-            |                       3. Xóa                                      |
-            |                       4. Danh sách các tài khoản                  |
-            |                       0. Thoát                                    |
-            ----------------------------Chọn chức năng--------------------------
-            Chọn chức năng:             """;
+    static String menu =
+            "---------------------MONEY CALCULATION SOFTWARE---------------------\n"+
+            "|           1. Display the list of machines available in the shop   |\n"+
+            "|           2.      Add a new device to the list                    |\n"+
+            "|           3.      Modify machine information                      |\n"+
+            "|           4.      Remove a machine from the list                  |\n"+
+            "|           5.           More services                              |\n"+
+            "|           6.         Edit hourly billing                          |\n"+
+            "|           7.                 Bill                                 |\n"+
+            "|           8.              Manage account                          |\n"+
+            "|           9.                 Turnover                             |\n"+
+            "|           10.  >>>>>>>>>>>> Exit <<<<<<<<<<<<<                    |\n"+
+            "--------------------------------------------------------------------\n"+
+            "Choice:  ";
+    static String menuAccount =
+            "--------------------Manage account -----------------\n"+
+            "|             1. Add new a account                  |\n"+
+            "|             2. Edit account                       |\n"+
+            "|             3. Delete account                     |\n"+
+            "|             4. List of accounts                   |\n"+
+            "|             0. >>>>>>>>>>>> Exit <<<<<<<<<<<<     |\n"+
+            "----------------------------------------------------\n"+
+            "Choice:             ";
 
     public int scannerInt() {
         int n;
@@ -48,14 +49,15 @@ public class Menu {
     }
 
     public void case1(){
-        System.out.println("1. Hiển thị các máy đang online" +
-                "\n2. Hiển thị các máy đang offline" +
-                "\n0. Thoát" +
-                "\n-------------Chọn chức năng----------");
+        System.out.println("1. Show devices that are online" +
+                "\n2. Show devices that are offline" +
+                "\n0. Exit" +
+                "\n------------------------------" +
+                "\nChoice: ");
         int choice;
         while (true) {
             choice = scannerInt();
-            if(choice < 0 || choice > 2) System.out.printf("Chỉ nhập từ (0-2)! Nhập lại: ");
+            if(choice < 0 || choice > 2) System.out.printf("Enter only words (0-2)! Retype: ");
             else{
                 break;
             }
@@ -64,11 +66,12 @@ public class Menu {
         switch (choice){
             case 1:{
                 list = computerList.listComputerChoice(true);
-                if(list.size() == 0) System.out.println("Không có máy nào online!");
+                if(list.size() == 0) System.out.println("No machines online!");
                 else{
                     int i = 0;
                     for(Computer con : list){
-                        int hour = Calendar.getInstance().getTime().getHours()-list.get(i).getStartTime().getHours();
+                        Date date = new Date();
+                        Long hour = Long.valueOf(date.getHours() -list.get(i).getStartTime().getHours());
                         System.out.println((i+1)+ ": "+ list.get(i).getNameComputer() + " - "+ hour +"h");
                         i++;
                     }
@@ -79,7 +82,7 @@ public class Menu {
 
                 list = computerList.listComputerChoice(false);
                 if(list.size() == 0){
-                    System.out.println("Không có máy nào offline!");
+                    System.out.println("No machines offline!");
                 }
                 else{
                     int i = 0;
@@ -87,12 +90,12 @@ public class Menu {
                         System.out.println((i+1)+ ": "+ list.get(i).getNameComputer());
                         i++;
                     }
-                    System.out.printf("Nhập ID cần bật (Nhập 0 để thoát): ");
+                    System.out.printf("Enter the ID to enable (Enter 0 to exit): ");
 
                     int index;
                     while (true) {
                         index = scannerInt();
-                        if(index == -1 ||  index > list.size()) System.out.printf("Yêu cầu nhập số trong khoảng (0-"+list.size()+"): ");
+                        if(index == -1 ||  index > list.size()) System.out.printf("Enter only words (0-"+list.size()+")!  Retype: ");
                         else if(index == 0) {
                             break;
                         }
@@ -101,7 +104,7 @@ public class Menu {
                             String name = list.get(index).getNameComputer();
                             int position = computerList.findItemListComputer(name);
                             computerList.setItemList(position, true);
-                            System.out.println("Bật thành công!");
+                            System.out.println("Turn on successfully!");
 
                             break;
                         }
@@ -117,9 +120,9 @@ public class Menu {
     }
 
     private String Validate(String name){
-        if(name.equals("")) return "Không được để trống!";
+        if(name.equals("")) return "Can't be left blank!";
         for (Computer com : computerList.getListComputer()) {
-            if (name.equals(com.getNameComputer())) return "Đã tồn tại tên!Nhập lại!";
+            if (name.equals(com.getNameComputer())) return "Name already exists! Re-enter: ";
         }
         return "";
     }
@@ -129,9 +132,9 @@ public class Menu {
         Boolean status;
         int time;
         scanner.nextLine();
-        System.out.println("-------------Thêm máy-------------");
+        System.out.println("-------------Add machine-------------");
         while (true){
-            System.out.printf("Tên máy: "); name = scanner.nextLine();
+            System.out.printf("Machine name: "); name = scanner.nextLine();
             String res = Validate(name);
             if(res == ""){
                 Computer com = new Computer(name);
@@ -147,20 +150,20 @@ public class Menu {
     public void case3(){
 
         computerList.printListComputer();
-        System.out.printf("Nhập ID máy cần sửa số thứ tự: ");
+        System.out.printf("Enter the machine ID to edit the ordinal number: ");
         int id1, id2;
         while (true){
             id1 = scannerInt();
-            if(id1 <= 0 || id1 > computerList.size()) System.out.printf("Yêu cầu nhập số trong khoảng(1-" + computerList.size()+"): ");
+            if(id1 <= 0 || id1 > computerList.size()) System.out.printf("Enter only words (1-" + computerList.size()+")!  Retype: ");
             else break;
         }
         System.out.printf("Nhập số thứ tự mới: ");
         while (true){
             id2 = scannerInt();
-            if(id1 == id2) System.out.printf("2 số thứ tự không được trùng! Nhập lại: ");
-            else if(id2 <= 0 || id2 > computerList.size()) System.out.printf("Yêu cầu nhập số trong khoảng(1-" + computerList.size()+"): ");
+            if(id1 == id2) System.out.printf("2 ordinal numbers cannot match! Retype: ");
+            else if(id2 <= 0 || id2 > computerList.size()) System.out.printf("Enter only words (1-" + computerList.size()+")!  Retype: ");
             else {
-                System.out.println("Đổi chỗ thành công!");
+                System.out.println("Successfully swapped!");
                 break;
             }
         }
@@ -169,27 +172,27 @@ public class Menu {
 
     public void case4(){
         computerList.printListComputer();
-        System.out.printf("\nNhập ID máy để xóa");
+        System.out.printf("\nEnter the machine ID to delete: ");
         int index;
         while (true) {
             index = scannerInt();
-            if(index <= 0 || index > computerList.size()) System.out.printf("Yêu cầu nhập số trong khoảng(1-" + computerList.size()+"): ");
+            if(index <= 0 || index > computerList.size()) System.out.printf("Enter only words (1-" + computerList.size()+")! Retype: ");
             else break;
         }
-        System.out.printf("Bạn có chắc muốn xóa không? yes nhập 1, no nhập 0: ");
+        System.out.printf("Are you sure you want to delete it? Yes:1, No:0 : ");
         int check;
         while (true){
             check = scannerInt();
             if(check == 0){
-                System.out.println("Hủy xóa");
+                System.out.println("Cancel delete");
                 break;
             }
             else if(check == 1){
                 computerList.deleteItemListComputer(index);
-                System.out.println("Xóa thành công!");
+                System.out.println("Delete successfully!");
                 break;
             }
-            else System.out.printf("Chỉ nhập 0 hoặc 1! Nhập lại: ");
+            else System.out.printf("Enter only 0 or 1! Retype: ");
         }
 
     }
@@ -204,7 +207,7 @@ public class Menu {
     public void case5(){
         String serviceName;
         int money;
-        System.out.printf("Nhập tên dịch vụ: ");
+        System.out.printf("Enter the service name: ");
         scanner.nextLine();
         while (true){
             serviceName = scanner.nextLine();
@@ -213,81 +216,81 @@ public class Menu {
                 break;
             }
             else if(check == 0){
-                System.out.printf("Không được để trống! Nhập lại: ");
+                System.out.printf("Can't be left blank! Retype: ");
             }
             else {
-                System.out.printf("Đã tồn tại dịch vụ này! Nhập lại: ");
+                System.out.printf("This service already exists! Retype: ");
             }
         }
 
-        System.out.printf("Nhập giá dịch vụ: ");
+        System.out.printf("Enter service price: ");
         while (true){
             money = scannerInt();
-            if(money <= 0) System.out.printf("Giá là số nguyên dương > 0! Nhập lại: ");
+            if(money <= 0) System.out.printf("Price is a positive integer > 0! Retype: ");
             else break;
         }
         serviceList.addItemListService(new Service(serviceName, money));
-        System.out.println("Thêm thành công!");
+        System.out.println("Add new successfully!");
     }
 
-    public void case7_1(){
-        ArrayList<Computer> list = computerList.listComputerChoice(true);
-        if(list.size() == 0) System.out.println("Không có máy nào online!");
-        else{
-            int i = 0;
-            for(Computer con : list){
-                int hour = Calendar.getInstance().getTime().getHours()-list.get(i).getStartTime().getHours();
-                System.out.println((i+1)+ ": "+ list.get(i).getNameComputer() + " - "+ hour +"h");
-                i++;
-            }
-            System.out.printf("Nhập ID máy cần tính tiền!(Nhập 0 để thoát): ");
-
-            int index;
-            while (true) {
-                index = scannerInt();
-                if(index == -1 ||  index > list.size()) System.out.printf("Yêu cầu nhập số trong khoảng (0-"+list.size()+"): ");
-                else if(index == 0) {
-                    break;
-                }
-                else {
-                    index--;
-                    String name = list.get(index).getNameComputer();
-                    int position = computerList.findItemListComputer(name);
-                    System.out.println("Tiền cần thanh toán là: " + computerList.getItemListComputer(position).sumMoney());
-                    computerList.setItemList(position, false);
-                    break;
-                }
-            }
-        }
-    }
+//    public void case7_1(){
+//        ArrayList<Computer> list = computerList.listComputerChoice(true);
+//        if(list.size() == 0) System.out.println("No machines online!");
+//        else{
+//            int i = 0;
+//            for(Computer con : list){
+//                int hour = Calendar.getInstance().getTime().getHours()-list.get(i).getStartTime().getHours();
+//                System.out.println((i+1)+ ": "+ list.get(i).getNameComputer() + " - "+ hour +"h");
+//                i++;
+//            }
+//            System.out.printf("Enter the ID of the machine to be charged! (Enter 0 to exit): ");
+//
+//            int index;
+//            while (true) {
+//                index = scannerInt();
+//                if(index == -1 ||  index > list.size()) System.out.printf("Enter only words (0-"+list.size()+"): ");
+//                else if(index == 0) {
+//                    break;
+//                }
+//                else {
+//                    index--;
+//                    String name = list.get(index).getNameComputer();
+//                    int position = computerList.findItemListComputer(name);
+//                    System.out.println("The amount to be paid is: " + computerList.getItemListComputer(position).sumMoney());
+//                    computerList.setItemList(position, false);
+//                    break;
+//                }
+//            }
+//        }
+//    }
 
     public void case7_2(int position){
         boolean out = false;
         serviceList.printListService();
-        System.out.printf("Nhập STT dịch vụ!(Nhập 0 để thoát): ");
+        System.out.printf("Enter STT Service! (Enter 0 to exit): ");
         while (true){
             int index = scannerInt();
             if(index == 0) out = true;
             else if(index<0 || index > serviceList.size())
-                System.out.printf("Chỉ nhập 1 số trong khoảng(0-"+serviceList.size()+")!Nhập lại: ");
+                System.out.printf("Enter only words (0-"+serviceList.size()+")! Retype: ");
             else{
                 Computer com = computerList.getItemListComputer(position);
                 int money = com.getMoneyService() + serviceList.getItemListServece(index).getPrice();
                 com.setMoneyService(money);
                 computerList.editItemListComputer(position, com);
-                System.out.println("Thêm dịch vụ thành công!");
-                System.out.printf("Bạn có muốn tiếp tục thêm dịch vụ không!1. Yes 0.No: ");
+                System.out.println("Add new service successful!");
+                System.out.printf("Would you like to continue adding services! 1.Yes   0.No: ");
                 int check;
                 while (true) {
                     check = scannerInt();
-                    if(check < 0 || check > 1) System.out.printf("Chỉ nhập 0 hoặc 1! Nhập lại: ");
+                    if(check < 0 || check > 1) System.out.printf("Enter only 0 or 1! Retype: ");
                     else if (check == 0) {
                         out = true;
                         break;
                     }
                     else{
                         serviceList.printListService();
-                        System.out.printf("Nhập STT dịch vụ!(Nhập 0 để thoát): ");
+                        System.out.printf("Enter STT Service! (Enter 0 to exit): ");
                         break;
                     }
                 }
@@ -299,32 +302,33 @@ public class Menu {
     }
 
     public void case7(){
-        System.out.println("--------------------Chọn chức năng----------------");
-        System.out.println("1. Tính tiền");
-        System.out.println("2. Thêm dịch vụ");
-        System.out.println("0. Thoát");
+        System.out.println("--------------------Choice----------------");
+        System.out.println("1. Bill");
+        System.out.println("2. Add service");
+        System.out.println("0. Exit");
         int choice;
         while (true){
             choice = scannerInt();
-            if(choice < 0 || choice > 2) System.out.printf("Chỉ nhập số trong khoảng(0-2)!Nhập lại: ");
+            if(choice < 0 || choice > 2) System.out.printf("Enter only numbers in the range(0-2)!Re-enter: ");
             else break;
         }
         ArrayList<Computer> list = computerList.listComputerChoice(true);
-        if(list.size() == 0) System.out.println("Không có máy nào online!");
+        if(list.size() == 0) System.out.println("No machines online!");
         else {
             int i = 0;
             for (Computer con : list) {
-                int hour = Calendar.getInstance().getTime().getHours() - list.get(i).getStartTime().getHours();
+                Date date = new Date();
+                int hour = date.getHours() - list.get(i).getStartTime().getHours();
                 System.out.println((i + 1) + ": " + list.get(i).getNameComputer() + " - " + hour + "h");
                 i++;
             }
-            System.out.printf("Nhập ID máy!(Nhập 0 để thoát): ");
+            System.out.printf("Enter the machine ID! (Enter 0 to exit): ");
 
             int index;
             while (true) {
                 index = scannerInt();
                 if (index == -1 || index > list.size())
-                    System.out.printf("Yêu cầu nhập số trong khoảng (0-" + list.size() + "): ");
+                    System.out.printf("Enter only numbers in the range (0-" + list.size() + "): ");
                 else if (index == 0) {
                     break;
                 } else {
@@ -337,7 +341,7 @@ public class Menu {
                             break;
                         }
                         case 1:{
-                            System.out.println("Tiền cần thanh toán là: " + computerList.getItemListComputer(position).sumMoney());
+                            System.out.println("The amount to be paid is: " + computerList.getItemListComputer(position).sumMoney());
                             computerList.setItemList(position, false);
                             break;
                         }
@@ -356,49 +360,49 @@ public class Menu {
     private void case8_1(){
         //Thêm mới
         String fullName, password;
-        System.out.printf("Nhập user name: ");
+        System.out.printf("Account: ");
         scanner.nextLine();
         while (true){
             fullName = scanner.nextLine();
-            if(fullName.equals("")) System.out.printf("Không được để trống! Nhập lại: ");
+            if(fullName.equals("")) System.out.printf("Can't be left blank! Retype: ");
             else {
                 boolean check = userList.findItemListUser(fullName);
                 if(check == true){
-                    System.out.printf("Tài khoản đã tồn tại! Nhập lại: ");
+                    System.out.printf("Account already exists! Retype: ");
                 }
                 else break;
             }
         }
-        System.out.printf("Nhập mật khẩu: ");
+        System.out.printf("Password: ");
         password = scanner.nextLine();
         userList.addItemListUser(new User(fullName, password));
-        System.out.println("Thêm mới thành công!");
+        System.out.println("Add successful!");
     }
 
     private void case8_2() {
         //Sửa
         case8_4();
-        System.out.printf("Nhập ID máy cần sửa: ");
+        System.out.printf("Enter the machine ID to be repaired: ");
         int index;
         while (true) {
             index = scannerInt();
             if (index <= 0 || index > userList.size())
-                System.out.printf("Chỉ nhập số trong khoảng (1-" + userList.size() + "). Nhập lại: ");
+                System.out.printf("Enter only numbers in the range (1-" + userList.size() + "): ");
             else break;
         }
-        System.out.println("User name: "+ userList.getItemListUser(index).getUsername()+
+        System.out.println("Account: "+ userList.getItemListUser(index).getUsername()+
             "\nPassword: " + userList.getItemListUser(index).getPassword());
         User u = new User();
         scanner.nextLine();
         while (true){
-            System.out.printf("Nhập user name mới: ");u.setUsername(scanner.nextLine());
-            System.out.printf("Nhập password mới: "); u.setPassword(scanner.nextLine());
+            System.out.printf("Enter new account: ");u.setUsername(scanner.nextLine());
+            System.out.printf("Enter new password: "); u.setPassword(scanner.nextLine());
             if(userList.editItemListUser(index, u)){
-                System.out.printf("Sửa thành công!");
+                System.out.printf("Edit successful!");
                 break;
             }
             else{
-                System.out.println("User name mới và password mới không được trùng với user name cũ và password cũ!");
+                System.out.println("new account and new password must not be the same as the old account and old password!");
             }
         }
 
@@ -408,32 +412,32 @@ public class Menu {
     private void case8_3(){
         //Xóa
         case8_4();
-        System.out.printf("Chọn ID tài khoản cần xóa: ");
+        System.out.printf("Select the account ID to delete: ");
         int index;
         while (true) {
             index = scannerInt();
             if (index <= 0 || index > userList.size())
-                System.out.printf("Chỉ nhập số trong khoảng (1-" + userList.size() + "). Nhập lại: ");
+                System.out.printf("Enter only numbers in the range (1-" + userList.size() + "): ");
             else break;
         }
-        System.out.printf("Bạn có chắc chắn muốn xóa tài khoản này? 1.Yes  0. No : ");
+        System.out.printf("Are you sure you want to delete this account? 1.Yes  0.No : ");
         int check;
         while (true) {
             check = scannerInt();
             if (check == 0) {
-                System.out.println("Hủy xóa");
+                System.out.println("Cancel delete!");
                 break;
             } else if (check == 1) {
                 userList.deleteItemListUser(index);
-                System.out.println("Xóa thành công");
+                System.out.println("Delete successfully! ");
                 break;
-            } else System.out.printf("Chỉ nhập 0 hoặc 1! Nhập lại: ");
+            } else System.out.printf("Enter only 0 or 1! Retype: ");
         }
     }
 
     private void case8_4(){
         //Danh sách
-        System.out.println("-----------------------Danh sách tài khoản-----------------------");
+        System.out.println("-----------------------List account-----------------------");
         userList.printListUser();
     }
 
@@ -442,7 +446,7 @@ public class Menu {
         int index;
         while (true){
             index = scannerInt();
-            if(index < 0 || index > 4) System.out.printf("Yêu cầu nhập số trong khoảng(0-4): ");
+            if(index < 0 || index > 4) System.out.printf("Required to enter a number in the range (0-4): ");
             else {
                 switch (index){
                     case 0:{
@@ -451,14 +455,14 @@ public class Menu {
                     case 1:{
                         case8_1();
                         case8_4();
-                        System.out.printf("Nhập 1 phím bất kỳ để tiếp tục: ");
+                        System.out.printf("Enter any key to continue: ");
                         scanner.nextLine();
                         break;
                     }
                     case 2:{
                         case8_2();
                         case8_4();
-                        System.out.printf("Nhập 1 phím bất kỳ để tiếp tục: ");
+                        System.out.printf("Enter any key to continue: ");
                         scanner.nextLine();
                         break;
                     }
@@ -468,7 +472,7 @@ public class Menu {
                     }
                     case 4:{
                         case8_4();
-                        System.out.printf("Nhập 1 phím bất kỳ để tiếp tục: ");
+                        System.out.printf("Enter any key to continue: ");
                         scanner.nextLine();
                         scanner.nextLine();
                         break;
@@ -510,7 +514,7 @@ public class Menu {
                         break;
                     }
                     case 6:{
-                        System.out.println("Chưa làm");
+                        System.out.println("Nooooooooooooo :<");
                         break;
                     }
                     case 7:{
@@ -522,7 +526,7 @@ public class Menu {
                         break;
                     }
                     case 9:{
-                        System.out.println("Chưa làm");
+                        System.out.println("Noooooooooooooo :<");
                         break;
                     }
 
@@ -531,14 +535,14 @@ public class Menu {
                     }
 
                     default: {
-                        System.out.println("Không có lệnh trên! Nhập lại: ");
+                        System.out.println("No command above! Retype: ");
                         break;
                     }
 
                 }
                 System.out.print(menu);
             } catch (NumberFormatException | InputMismatchException e){
-                System.out.print("Chỉ nhập số trong khoảng (1-10)! Nhập lại: ");
+                System.out.print("Enter only numbers in the range (1-10)! Retype: ");
                 scanner.nextLine();
 
             }

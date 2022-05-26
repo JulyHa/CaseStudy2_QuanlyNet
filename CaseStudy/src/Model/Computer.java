@@ -21,13 +21,13 @@ public class Computer {
     public Computer(String nameComputer) {
         this.nameComputer = nameComputer;
         this.status = false;
-//        DateFormat formatter = new SimpleDateFormat("MM/dd/yy h:mm a");
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 //        try {
 //            Date date = (Date)formatter.parse(String.valueOf(startTime));
 //        } catch (ParseException e) {
 //            e.printStackTrace();
 //        }
-        this.startTime = Calendar.getInstance().getTime();
+        this.startTime = new Date();
         this.moneyService = 0;
     }
 
@@ -35,7 +35,7 @@ public class Computer {
     public Computer(String nameComputer, Boolean status) {
         this.nameComputer = nameComputer;
         this.status = status;
-        this.startTime = Calendar.getInstance().getTime();
+        this.startTime = new Date();
         this.moneyService = 0;
     }
 
@@ -47,9 +47,13 @@ public class Computer {
     }
     @Override
     public String toString() {
-        Calendar cur = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
         return nameComputer + '-' + (status?"Avaiable":"Disable") + '-' +
-                startTime.getTime() + "-" + moneyService;
+                sdf.format(startTime.getTime()) + "-" + moneyService;
+
+//        return nameComputer + '-' + (status?"Avaiable":"Disable") + '-' +
+//                startTime.getTime() + "-" + moneyService;
     }
 
     public String getNameComputer() {

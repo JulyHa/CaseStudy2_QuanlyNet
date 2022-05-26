@@ -26,8 +26,8 @@ public class ManageComputer {
             ArrayList<String>list = readWriteFile.readFile((path));
             for (String line : list){
                 String[] s = line.split("-");
-                DateFormat formatter = new SimpleDateFormat("MM/dd/yy h:mm a");
-                Date date = (Date)formatter.parse(s[2]);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                Date date = (Date)sdf.parse(s[2]);
                 Computer com = new Computer(s[0], s[1].equals("Avaiable"), date,Integer.valueOf(s[3]) );
                 listComputer.add(com);
             }
@@ -116,8 +116,8 @@ public class ManageComputer {
 
     public void printItemListComputer(int i){
         i--;
-        System.out.println("Tên máy: " + listComputer.get(i-1).getNameComputer() + " - "
-                + (listComputer.get(i).getStatus()== true? listComputer.get(i).sumMoney() :"Máy đang offline"));
+        System.out.println("Machine name: " + listComputer.get(i-1).getNameComputer() + " - "
+                + (listComputer.get(i).getStatus()== true? listComputer.get(i).sumMoney() :"The device is offline"));
     }
 
     public void swap(int i, int j){

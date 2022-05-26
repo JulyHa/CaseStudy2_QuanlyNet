@@ -11,17 +11,15 @@ public class Menu {
     static ManageStaff manageStaff = new ManageStaff();
 
     public void printMenu() {
-        String menu = """
-                -----------Employee Management----------
-                1. Thêm nhân viên
-                2. Tìm kiếm nhân viên
-                3. Kiểm tra trạng thái nhân viên
-                4. Sửa thông tin nhân viên
-                5. Thay đổi trạng thái nhân viên
-                6. Thông tin tài khoản
-                7. Đăng xuất
-                ----------------------------------------
-                """;
+        String menu = "-----------Employee Management----------"+
+                "1. Thêm nhân viên\n"+
+                "2. Tìm kiếm nhân viên\n"+
+                "3. Kiểm tra trạng thái nhân viên\n"+
+                "4. Sửa thông tin nhân viên\n"+
+                "5. Thay đổi trạng thái nhân viên\n"+
+                "6. Thông tin tài khoản \n"+
+                "7. Đăng xuất \n"+
+                "----------------------------------------\n";
         System.out.println(menu);
     }
 

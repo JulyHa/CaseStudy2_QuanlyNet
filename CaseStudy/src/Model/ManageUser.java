@@ -83,9 +83,9 @@ public class ManageUser {
                 s+= u +"\n";
             }
             if(readWriteFile.wirteFile(path, s)){
-                System.out.println("Sửa thành công!");
+                System.out.println("Edit successful!");
             }else {
-                System.out.println("Sửa không thành công");
+                System.out.println("Repair failed!");
             }
             return true;
         }
@@ -121,7 +121,7 @@ public class ManageUser {
 
     public void printListUser() {
         if(listUser.toArray().length == 0){
-            System.out.printf("Danh sách rỗng!");
+            System.out.printf("List is empty!");
             return;
         }
         int count = 0;
