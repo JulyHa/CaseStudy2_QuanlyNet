@@ -14,7 +14,7 @@ public class Service {
 
     @Override
     public String toString() {
-        return nameService + "-" +price;
+        return nameService + "," +price;
     }
 
     public String getNameService() {

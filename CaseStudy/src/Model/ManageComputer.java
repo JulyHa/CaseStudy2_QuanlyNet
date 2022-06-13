@@ -21,7 +21,16 @@ public class ManageComputer {
                 String[] s = line.split("-");
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                 Date date = (Date)sdf.parse(s[2]);
-                Computer com = new Computer(s[0], s[1].equals("Avaiable"), date,Integer.valueOf(s[3]) );
+                ArrayList<Service> services = new ArrayList<>();
+                if(s[3].length() > 1){
+                    String[] arr = s[3].split(";");
+                    for (String x :arr) {
+                        String[] newArr = x.split(",");
+                        Service service = new Service(newArr[0], Integer.parseInt(newArr[1]));
+                        services.add(service);
+                    }
+                }
+                Computer com = new Computer(s[0], s[1].equals("Avaiable"), date,services);
                 listComputer.add(com);
             }
         } catch (IOException | ParseException e) {
@@ -33,7 +42,7 @@ public class ManageComputer {
     private void writeFile(){
         String s = "";
         for (Computer u : listComputer){
-            s+= u +"\n";
+            s += u +"\n";
         }
         readWriteFile.wirteFile(path, s);
     }
@@ -63,7 +72,7 @@ public class ManageComputer {
 
     public void setItemList(int position, boolean status, Date date){
         listComputer.get(position).setStatus(status);
-        listComputer.get(position).setMoneyService(0);
+        listComputer.get(position).setServices(new ArrayList<>());
         listComputer.get(position).setStartTime(date);
         writeFile();
     }
@@ -77,7 +86,7 @@ public class ManageComputer {
         listComputer.get(i).setNameComputer(com.getNameComputer());
         listComputer.get(i).setStatus(com.getStatus());
         listComputer.get(i).setStartTime(com.getStartTime());
-        listComputer.get(i).setMoneyService(com.getMoneyService());
+        listComputer.get(i).setServices(com.getServices());
 
         writeFile();
 

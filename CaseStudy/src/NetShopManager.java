@@ -47,7 +47,7 @@ public class NetShopManager {
                         break;
                     }
                     case 6:{
-                        System.out.println("Nooooooooooooo :<");
+                        Menu.case6();
                         break;
                     }
                     case 7:{
@@ -58,12 +58,8 @@ public class NetShopManager {
                         Menu.case8();
                         break;
                     }
-                    case 9:{
-                        System.out.println("Noooooooooooooo :<");
-                        break;
-                    }
 
-                    case 10:{
+                    case 9:{
                         System.exit(0);
                     }
 

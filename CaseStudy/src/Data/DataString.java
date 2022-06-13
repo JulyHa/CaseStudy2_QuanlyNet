@@ -8,11 +8,10 @@ public class DataString {
                     "|           3. Modify machine information                           |\n"+
                     "|           4. Remove a machine from the list                       |\n"+
                     "|           5. More services                                        |\n"+
-                    "|           6. Edit hourly billing                                  |\n"+
-                    "|           7. Bill                                                 |\n"+
-                    "|           8. Manage account                                       |\n"+
-                    "|           9. Turnover                                             |\n"+
-                    "|          10. Exit                                                 |\n"+
+                    "|           6. Bill                                                 |\n"+
+                    "|           7. Manage account                                       |\n"+
+                    "|           8. Turnover                                             |\n"+
+                    "|           9. Exit                                                 |\n"+
                     "--------------------------------------------------------------------\n"+
                     " ===> Choice: ";
     public static String menuAccount =
@@ -36,6 +35,13 @@ public class DataString {
             "--------------------Choice---------\n"+
             "|      1. Bill                    |\n"+
             "|      2. Add service             |\n"+
+            "|      0. Exit                    |\n"+
+            "-----------------------------------\n"+
+            " ===> Choice: ";
+    public static String menuTotalRevenue =
+            "--------------------Choice---------\n"+
+            "|      1. Total revenue           |\n"+
+            "|      2. Revenue over time       |\n"+
             "|      0. Exit                    |\n"+
             "-----------------------------------\n"+
             " ===> Choice: ";

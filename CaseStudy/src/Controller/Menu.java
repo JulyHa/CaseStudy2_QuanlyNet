@@ -14,30 +14,26 @@ public class Menu {
     static ManageComputer computerList = new ManageComputer();
     static ManageService serviceList = new ManageService();
 
-    public static int scannerInt() {
-        int n;
-        try {
-            n = scanner.nextInt();
-            if (n >= 0) return n;
-            return -1;
-        } catch (NumberFormatException | InputMismatchException e) {
-            scanner.nextLine();
-            return -1;
-        }
+    public static int scannerInt(int start, int end) {
+        int number;
+        do {
+            try {
+                number = scanner.nextInt();
+                if (number >= start && number <= end) return number;
+                if(number < start || number > end) {
+                    System.out.println("Enter only "+start+" or "+end+"! Retype: ");
+                }
+                return -1;
+            } catch (NumberFormatException | InputMismatchException e) {
+                scanner.nextLine();
+                return -1;
+            }
+        }while(number < start && number > end);
+        //return -1;
     }
     public static boolean checkYesNo(){
-        int check;
-        while (true) {
-            check = scannerInt();
-            if(check < 0 || check > 1) {
-                System.out.print("Enter only 0 or 1! Retype: ");
-            }
-            else {
-                break;
-            }
-        }
+        int check = scannerInt(0, 1);
         return check == 1;
-
     }
 
     public static void getComputerActivity(){
@@ -73,39 +69,23 @@ public class Menu {
             }
             System.out.print("Enter the ID to enable (Enter 0 to exit): ");
 
-            int index;
-            while (true) {
-                index = scannerInt();
-                if (index == -1 || index > list.size())
-                    System.out.print("Enter only words (0-" + list.size() + ")!  Retype: ");
-                else if (index == 0) {
-                    break;
-                } else {
-                    index--;
-                    String name = list.get(index).getNameComputer();
-                    int position = computerList.findItemListComputer(name);
-                    Date date = new Date();
-                    computerList.setItemList(position, true, date);
-                    System.out.println("Turn on successfully!");
-
-                    break;
-                }
+            int index = scannerInt(0, list.size());
+            if (index > 0) {
+                index--;
+                String name = list.get(index).getNameComputer();
+                int position = computerList.findItemListComputer(name);
+                Date date = new Date();
+                computerList.setItemList(position, true, date);
+                System.out.println("Turn on successfully!");
             }
         }
     }
 
     public static void case1(){
-
         int choice = 1;
         while (choice != 0) {
             System.out.print(DataString.menuStatus);
-            while (true) {
-                choice = scannerInt();
-                if(choice < 0 || choice > 2) System.out.print("Enter only words (0-2)! Retype: ");
-                else{
-                    break;
-                }
-            }
+            choice = scannerInt(0,2);
             switch (choice) {
                 case 1: {
                     getComputerActivity();
@@ -135,7 +115,7 @@ public class Menu {
         String name;
         Boolean status;
         int time;
-        scanner.nextLine();
+//        scanner.nextLine();
         System.out.println("-------------Add machine-------------");
         while (true){
             System.out.print("Machine name: "); name = scanner.nextLine();
@@ -156,16 +136,17 @@ public class Menu {
         computerList.printListComputer();
         System.out.print("Enter the machine ID to edit the ordinal number: ");
         int id1, id2;
-        while (true){
-            id1 = scannerInt();
-            if(id1 <= 0 || id1 > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")!  Retype: ");
-            else break;
-        }
+        id1 = scannerInt(1,computerList.size());
+//        while (true){
+//
+//            if(id1 <= 0 || id1 > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")!  Retype: ");
+//            else break;
+//        }
         System.out.print("Enter new location: ");
+
         while (true){
-            id2 = scannerInt();
+            id2 = scannerInt(1, computerList.size());
             if(id1 == id2) System.out.print("2 ordinal numbers cannot match! Retype: ");
-            else if(id2 <= 0 || id2 > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")!  Retype: ");
             else {
                 System.out.println("Successfully swapped!");
                 break;
@@ -177,12 +158,12 @@ public class Menu {
     public static void case4(){
         computerList.printListComputer();
         System.out.print("\nEnter the machine ID to delete: ");
-        int index;
-        while (true) {
-            index = scannerInt();
-            if(index <= 0 || index > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")! Retype: ");
-            else break;
-        }
+        int index = scannerInt(1, computerList.size());
+//        while (true) {
+//
+//            if(index <= 0 || index > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")! Retype: ");
+//            else break;
+//        }
         System.out.print("Are you sure you want to delete it? Yes:1, No:0 : ");
         boolean check = checkYesNo();
         if(!check){
@@ -205,7 +186,6 @@ public class Menu {
         String serviceName;
         int money;
         System.out.print("Enter the service name: ");
-        scanner.nextLine();
         while (true){
             serviceName = scanner.nextLine();
             int check = validateSevice(serviceName);
@@ -221,36 +201,51 @@ public class Menu {
         }
 
         System.out.print("Enter service price: ");
-        while (true){
-            money = scannerInt();
-            if(money <= 0) System.out.print("Price is a positive integer > 0! Retype: ");
-            else break;
-        }
+        money = scannerInt(0, 999999999);
+//        while (true){
+//
+//            if(money <= 0) System.out.print("Price is a positive integer > 0! Retype: ");
+//            else break;
+//        }
         serviceList.addItemListService(new Service(serviceName, money));
         System.out.println("Add new successfully!");
     }
+    public static void case6_1(int position){
+        System.out.println("------------------Billl-------------");
+        System.out.println(" * Time: " + computerList.getItemListComputer(position).getHour());
+        System.out.println(" * Sever: ");
+        ArrayList<Service> services = computerList.getItemListComputer(position).getServices();
+        for(int i= 0; i< services.size(); i++){
+            System.out.println("    "+ (i+1) + ": " + services.get(i).getNameService() + " - " + services.get(i).getPrice());
+        }
+        System.out.println(" ====> The amount to be paid is: " + computerList.getItemListComputer(position).sumMoney());
+        computerList.setItemList(position, false, new Date());
+    }
 
-    public static void case7_2(int position){
+    public static void case6_2(int position){
         boolean out = false;
-        System.out.println("---------------List service-------------");
-        serviceList.printListService();
-        System.out.print("Enter STT Service! (Enter 0 to exit): ");
+
         while (true){
-            int index = scannerInt();
-            if(index == 0) out = true;
-            else if(index<0 || index > serviceList.size()) {
-                System.out.print("Enter only words (0-"+serviceList.size()+")! Retype: ");
+            System.out.println("---------------List service-------------");
+            serviceList.printListService();
+            System.out.print("Enter STT Service! (Enter 0 to exit): ");
+            int index = scannerInt(0, serviceList.size());
+            if(index == 0){
+                break;
+                //out = true;
             }
+//            else if(index<0 || index > serviceList.size()) {
+//                System.out.print("Enter only words (0-"+serviceList.size()+")! Retype: ");
+//            }
 
             else{
                 Computer com = computerList.getItemListComputer(position);
-                int money = com.getMoneyService() + serviceList.getItemListServece(index).getPrice();
-                com.setMoneyService(money);
+                com.addService(serviceList.getItemListServece(index));
                 computerList.editItemListComputer(position, com);
                 System.out.println("Add new service successful!");
                 System.out.print("Would you like to continue adding services! 1.Yes   0.No: ");
                 boolean check = checkYesNo();
-                if(check){
+                if(!check){
                     break;
                 }
 
@@ -259,31 +254,32 @@ public class Menu {
 
     }
 
-    public static void case7(){
+    public static void case6(){
 
         int choice = 1;
         while (choice != 0) {
             System.out.println(DataString.menuPay);
-            while (true) {
-                choice = scannerInt();
-                if (choice < 0 || choice > 2) System.out.print("Enter only numbers in the range(0-2)!Re-enter: ");
-                else break;
-            }
+            choice = scannerInt(0,2);
+//            while (true) {
+//
+//                if (choice < 0 || choice > 2) System.out.print("Enter only numbers in the range(0-2)!Re-enter: ");
+//                else break;
+//            }
 
             ArrayList<Computer> list = computerList.listComputerChoice(true);
             getComputerActivity();
 
             if (list.size() > 0) {
-                int index;
-                while (true) {
-                    index = scannerInt();
-                    if (index == -1 || index > list.size()) {
-                        System.out.print("Enter only numbers in the range (0-" + list.size() + "): ");
-                    }
-                    else {
-                        break;
-                    }
-                }
+                int index = scannerInt(0, list.size());
+//                while (true) {
+//
+//                    if (index == -1 || index > list.size()) {
+//                        System.out.print("Enter only numbers in the range (0-" + list.size() + "): ");
+//                    }
+//                    else {
+//                        break;
+//                    }
+//                }
                 if (index != 0) {
                         index--;
                         String name = list.get(index).getNameComputer();
@@ -294,12 +290,11 @@ public class Menu {
                                 break;
                             }
                             case 1: {
-                                System.out.println("The amount to be paid is: " + computerList.getItemListComputer(position).sumMoney());
-                                computerList.setItemList(position, false, new Date());
+                                case6_1(position);
                                 break;
                             }
                             case 2: {
-                                case7_2(position);
+                                case6_2(position);
                                 break;
                             }
                         }
@@ -310,7 +305,7 @@ public class Menu {
 
     }
 
-    private static void case8_1(){
+    private static void case7_1(){
         //Thêm mới
         String fullName, password;
         System.out.print("Account: ");
@@ -320,7 +315,7 @@ public class Menu {
             if(fullName.equals("")) System.out.print("Can't be left blank! Retype: ");
             else {
                 boolean check = userList.findItemListUser(fullName);
-                if(check == true){
+                if(check){
                     System.out.print("Account already exists! Retype: ");
                 }
                 else break;
@@ -332,17 +327,17 @@ public class Menu {
         System.out.println("Add successful!");
     }
 
-    private static void case8_2() {
+    private static void case7_2() {
         //Sửa
-        case8_4();
+        case7_4();
         System.out.print("Enter the machine ID to be repaired: ");
-        int index;
-        while (true) {
-            index = scannerInt();
-            if (index <= 0 || index > userList.size())
-                System.out.print("Enter only numbers in the range (1-" + userList.size() + "): ");
-            else break;
-        }
+        int index = scannerInt(1, userList.size());
+//        while (true) {
+//
+//            if (index <= 0 || index > userList.size())
+//                System.out.print("Enter only numbers in the range (1-" + userList.size() + "): ");
+//            else break;
+//        }
         System.out.println("Account: "+ userList.getItemListUser(index).getUsername()+
             "\nPassword: " + userList.getItemListUser(index).getPassword());
         User u = new User();
@@ -362,17 +357,17 @@ public class Menu {
 
     }
 
-    private static void case8_3(){
+    private static void case7_3(){
         //Xóa
-        case8_4();
+        case7_4();
         System.out.print("Select the account ID to delete: ");
-        int index;
-        while (true) {
-            index = scannerInt();
-            if (index <= 0 || index > userList.size())
-                System.out.print("Enter only numbers in the range (1-" + userList.size() + "): ");
-            else break;
-        }
+        int index = scannerInt(1, userList.size());
+//        while (true) {
+//
+//            if (index <= 0 || index > userList.size())
+//                System.out.print("Enter only numbers in the range (1-" + userList.size() + "): ");
+//            else break;
+//        }
         System.out.print("Are you sure you want to delete this account? 1.Yes  0.No : ");
         boolean check = checkYesNo();
         if (!check) {
@@ -384,52 +379,54 @@ public class Menu {
 
     }
 
-    private static void case8_4(){
+    private static void case7_4(){
         //Danh sách
         System.out.println("-----------------------List account-----------------------");
         userList.printListUser();
     }
 
-    public static void case8(){
-        System.out.print(DataString.menuAccount);
+    public static void case7(){
         int index;
         while (true){
-            index = scannerInt();
-            if(index < 0 || index > 4) System.out.print("Required to enter a number in the range (0-4): ");
-            else {
-                switch (index){
-                    case 0:{
-                        return;
-                    }
-                    case 1:{
-                        case8_1();
-                        case8_4();
-                        System.out.print("Enter any key to continue: ");
-                        scanner.nextLine();
-                        break;
-                    }
-                    case 2:{
-                        case8_2();
-                        case8_4();
-                        System.out.print("Enter any key to continue: ");
-                        scanner.nextLine();
-                        break;
-                    }
-                    case 3:{
-                        case8_3();
-                        break;
-                    }
-                    case 4:{
-                        case8_4();
-                        System.out.print("Enter any key to continue: ");
-                        scanner.nextLine();
-                        scanner.nextLine();
-                        break;
-                    }
+            System.out.print(DataString.menuAccount);
+            index = scannerInt(0,4);
+            switch (index){
+                case 0:{
+                    return;
                 }
-                System.out.print(DataString.menuAccount);
+                case 1:{
+                    case7_1();
+                    case7_4();
+                    System.out.print("Enter any key to continue: ");
+                    scanner.nextLine();
+                    break;
+                }
+                case 2:{
+                    case7_2();
+                    case7_4();
+                    System.out.print("Enter any key to continue: ");
+                    scanner.nextLine();
+                    break;
+                }
+                case 3:{
+                    case7_3();
+                    break;
+                }
+                case 4:{
+                    case7_4();
+                    System.out.print("Enter any key to continue: ");
+                    scanner.nextLine();
+                    scanner.nextLine();
+                    break;
+                }
             }
         }
+
+    }
+    public static void case8(){
+        System.out.println(DataString.menuTotalRevenue);
+        int choice = scannerInt(0,2);
+
     }
 
 }
