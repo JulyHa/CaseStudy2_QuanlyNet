@@ -42,7 +42,11 @@ public class DataString {
             "--------------------Choice---------\n"+
             "|      1. Total revenue           |\n"+
             "|      2. Revenue over time       |\n"+
+            "|      3. Revenue by month       |\n"+
             "|      0. Exit                    |\n"+
             "-----------------------------------\n"+
             " ===> Choice: ";
+    public static String[] MONTH = {"January", "February", "March", "April", "May", "June", "July",
+                        "August", "September", "October","November", "December"};
+
 }

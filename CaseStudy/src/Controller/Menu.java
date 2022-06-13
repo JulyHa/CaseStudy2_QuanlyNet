@@ -3,16 +3,20 @@ package Controller;
 import Data.DataString;
 import Model.*;
 
+import java.sql.SQLOutput;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Menu {
 
     static Scanner scanner = new Scanner(System.in);
-    static Boolean end_CaseStudy = false;
+//    static Boolean end_CaseStudy = false;
     static ManageUser userList =  new ManageUser() ;
     static ManageComputer computerList = new ManageComputer();
     static ManageService serviceList = new ManageService();
+
+    static ManageTurnover turnoverList = new ManageTurnover();
 
     public static int scannerInt(int start, int end) {
         int number;
@@ -20,16 +24,17 @@ public class Menu {
             try {
                 number = scanner.nextInt();
                 if (number >= start && number <= end) return number;
-                if(number < start || number > end) {
-                    System.out.println("Enter only "+start+" or "+end+"! Retype: ");
+                else
+                {
+//                    scanner.nextLine();
+                    System.out.print("Enter only "+start+" or "+end+"! Retype: ");
                 }
-                return -1;
+//                return -1;
             } catch (NumberFormatException | InputMismatchException e) {
                 scanner.nextLine();
                 return -1;
             }
-        }while(number < start && number > end);
-        //return -1;
+        }while(true);
     }
     public static boolean checkYesNo(){
         int check = scannerInt(0, 1);
@@ -137,11 +142,6 @@ public class Menu {
         System.out.print("Enter the machine ID to edit the ordinal number: ");
         int id1, id2;
         id1 = scannerInt(1,computerList.size());
-//        while (true){
-//
-//            if(id1 <= 0 || id1 > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")!  Retype: ");
-//            else break;
-//        }
         System.out.print("Enter new location: ");
 
         while (true){
@@ -159,11 +159,6 @@ public class Menu {
         computerList.printListComputer();
         System.out.print("\nEnter the machine ID to delete: ");
         int index = scannerInt(1, computerList.size());
-//        while (true) {
-//
-//            if(index <= 0 || index > computerList.size()) System.out.print("Enter only words (1-" + computerList.size()+")! Retype: ");
-//            else break;
-//        }
         System.out.print("Are you sure you want to delete it? Yes:1, No:0 : ");
         boolean check = checkYesNo();
         if(!check){
@@ -202,11 +197,6 @@ public class Menu {
 
         System.out.print("Enter service price: ");
         money = scannerInt(0, 999999999);
-//        while (true){
-//
-//            if(money <= 0) System.out.print("Price is a positive integer > 0! Retype: ");
-//            else break;
-//        }
         serviceList.addItemListService(new Service(serviceName, money));
         System.out.println("Add new successfully!");
     }
@@ -218,8 +208,10 @@ public class Menu {
         for(int i= 0; i< services.size(); i++){
             System.out.println("    "+ (i+1) + ": " + services.get(i).getNameService() + " - " + services.get(i).getPrice());
         }
-        System.out.println(" ====> The amount to be paid is: " + computerList.getItemListComputer(position).sumMoney());
+        int total = computerList.getItemListComputer(position).sumMoney();
+        System.out.println(" ====> The amount to be paid is: " + total);
         computerList.setItemList(position, false, new Date());
+        turnoverList.addItemTurnovers(new Turnover(computerList.getItemListComputer(position).getStartTime(), total));
     }
 
     public static void case6_2(int position){
@@ -232,11 +224,7 @@ public class Menu {
             int index = scannerInt(0, serviceList.size());
             if(index == 0){
                 break;
-                //out = true;
             }
-//            else if(index<0 || index > serviceList.size()) {
-//                System.out.print("Enter only words (0-"+serviceList.size()+")! Retype: ");
-//            }
 
             else{
                 Computer com = computerList.getItemListComputer(position);
@@ -257,38 +245,24 @@ public class Menu {
     public static void case6(){
 
         int choice = 1;
-        while (choice != 0) {
-            System.out.println(DataString.menuPay);
+        while (true) {
+            System.out.print(DataString.menuPay);
             choice = scannerInt(0,2);
-//            while (true) {
-//
-//                if (choice < 0 || choice > 2) System.out.print("Enter only numbers in the range(0-2)!Re-enter: ");
-//                else break;
-//            }
+            if(choice == 0){
+                return;
+            }
 
             ArrayList<Computer> list = computerList.listComputerChoice(true);
             getComputerActivity();
 
             if (list.size() > 0) {
                 int index = scannerInt(0, list.size());
-//                while (true) {
-//
-//                    if (index == -1 || index > list.size()) {
-//                        System.out.print("Enter only numbers in the range (0-" + list.size() + "): ");
-//                    }
-//                    else {
-//                        break;
-//                    }
-//                }
                 if (index != 0) {
                         index--;
                         String name = list.get(index).getNameComputer();
                         int position = computerList.findItemListComputer(name);
 
                         switch (choice) {
-                            case 0: {
-                                break;
-                            }
                             case 1: {
                                 case6_1(position);
                                 break;
@@ -332,12 +306,6 @@ public class Menu {
         case7_4();
         System.out.print("Enter the machine ID to be repaired: ");
         int index = scannerInt(1, userList.size());
-//        while (true) {
-//
-//            if (index <= 0 || index > userList.size())
-//                System.out.print("Enter only numbers in the range (1-" + userList.size() + "): ");
-//            else break;
-//        }
         System.out.println("Account: "+ userList.getItemListUser(index).getUsername()+
             "\nPassword: " + userList.getItemListUser(index).getPassword());
         User u = new User();
@@ -362,12 +330,6 @@ public class Menu {
         case7_4();
         System.out.print("Select the account ID to delete: ");
         int index = scannerInt(1, userList.size());
-//        while (true) {
-//
-//            if (index <= 0 || index > userList.size())
-//                System.out.print("Enter only numbers in the range (1-" + userList.size() + "): ");
-//            else break;
-//        }
         System.out.print("Are you sure you want to delete this account? 1.Yes  0.No : ");
         boolean check = checkYesNo();
         if (!check) {
@@ -423,9 +385,57 @@ public class Menu {
         }
 
     }
+    private static void case8_2(){
+        String start, end;
+        scanner.nextLine();
+        while (true) {
+            System.out.println("Enter start date(dd/MM/yyyy): ");
+            start = scanner.nextLine();
+            System.out.println("Enter end date(dd/MM/yyyy): ");
+            end = scanner.nextLine();
+            try {
+                int total = 0;
+                ArrayList<Turnover> turnovers = turnoverList.getTotalDate(new Date(start), new Date(end));
+                for (Turnover t:turnovers ) {
+                    total += t.getMoney();
+                }
+                System.out.println("Total from " + start + " -> " + end + ": " + total);
+                break;
+            } catch (Exception e) {
+                System.out.println("Date input error!");
+            }
+        }
+
+    }
+    private static void case8_3() {
+        System.out.println("--------------------Monthly revenue--------------------");
+        for (int i=1; i<=12; i++){
+            int total = 0;
+            for (Turnover t : turnoverList.getTurnovers()) {
+                if(t.getDate().getMonth() == (i-1)){
+                    total += t.getMoney();
+                }
+
+            }
+            System.out.println(DataString.MONTH[i-1] + " revenue: " + total);
+        }
+    }
     public static void case8(){
         System.out.println(DataString.menuTotalRevenue);
-        int choice = scannerInt(0,2);
+        int choice = scannerInt(0,3);
+        switch (choice){
+            case 0:
+                break;
+            case 1:
+                System.out.println("Total turnover: " + turnoverList.getTotalTurnover() );
+                break;
+            case 2:
+                case8_2();
+                break;
+            case 3:
+                case8_3();
+                break;
+        }
 
     }
 
