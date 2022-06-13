@@ -9,7 +9,7 @@ import java.util.Timer;
 
 public class Computer {
     private String nameComputer;
-    private Boolean status;
+    private boolean status;
     private Date startTime;
     private int moneyService;
 
@@ -21,12 +21,6 @@ public class Computer {
     public Computer(String nameComputer) {
         this.nameComputer = nameComputer;
         this.status = false;
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//        try {
-//            Date date = (Date)formatter.parse(String.valueOf(startTime));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
         this.startTime = new Date();
         this.moneyService = 0;
     }

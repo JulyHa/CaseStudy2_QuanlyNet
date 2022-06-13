@@ -82,11 +82,6 @@ public class ManageUser {
             for (User u : listUser){
                 s+= u +"\n";
             }
-            if(readWriteFile.wirteFile(path, s)){
-                System.out.println("Edit successful!");
-            }else {
-                System.out.println("Repair failed!");
-            }
             return true;
         }
         return false;

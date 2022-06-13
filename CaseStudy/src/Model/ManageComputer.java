@@ -2,17 +2,10 @@ package Model;
 
 import Controller.ReadWriteFile;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 public class ManageComputer {
@@ -68,9 +61,10 @@ public class ManageComputer {
         this.listComputer = listComputer;
     }
 
-    public void setItemList(int position, boolean status){
+    public void setItemList(int position, boolean status, Date date){
         listComputer.get(position).setStatus(status);
         listComputer.get(position).setMoneyService(0);
+        listComputer.get(position).setStartTime(date);
         writeFile();
     }
 
