@@ -11,7 +11,6 @@ import java.util.*;
 public class Menu {
 
     static Scanner scanner = new Scanner(System.in);
-//    static Boolean end_CaseStudy = false;
     static ManageUser userList =  new ManageUser() ;
     static ManageComputer computerList = new ManageComputer();
     static ManageService serviceList = new ManageService();
@@ -32,7 +31,7 @@ public class Menu {
 //                return -1;
             } catch (NumberFormatException | InputMismatchException e) {
                 scanner.nextLine();
-                return -1;
+                System.out.print("Enter only "+start+" or "+end+"! Retype: ");
             }
         }while(true);
     }
@@ -181,6 +180,7 @@ public class Menu {
         String serviceName;
         int money;
         System.out.print("Enter the service name: ");
+        scanner.nextLine();
         while (true){
             serviceName = scanner.nextLine();
             int check = validateSevice(serviceName);
@@ -409,6 +409,7 @@ public class Menu {
     }
     private static void case8_3() {
         System.out.println("--------------------Monthly revenue--------------------");
+        System.out.printf("%20s %20s\n", "Month", "Money");
         for (int i=1; i<=12; i++){
             int total = 0;
             for (Turnover t : turnoverList.getTurnovers()) {
@@ -417,7 +418,8 @@ public class Menu {
                 }
 
             }
-            System.out.println(DataString.MONTH[i-1] + " revenue: " + total);
+            System.out.printf("%20s %20s\n", DataString.MONTH[i-1],total );
+//            System.out.println( + " revenue: " + );
         }
     }
     public static void case8(){
